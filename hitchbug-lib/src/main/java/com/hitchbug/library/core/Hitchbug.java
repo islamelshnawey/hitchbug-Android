@@ -14,6 +14,9 @@ import com.hitchbug.library.core.investigation.CrashAnalyzer;
 import com.hitchbug.library.core.investigation.CrashReporter;
 import com.hitchbug.library.core.investigation.CrashViewModel;
 import com.hitchbug.library.core.investigation.DefaultAppInfoProvider;
+import com.hitchbug.library.util.SendCrashDetails;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -37,6 +40,8 @@ public class Hitchbug {
 
         Log.d(TAG, "Initializing Hitchbug...");
         instance = new Hitchbug(application);
+
+        crashHandler(application);
 
         final Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
 
@@ -73,6 +78,24 @@ public class Hitchbug {
         crash.setId(crashId);
         //instance.crashReporter.report(new CrashViewModel(crash));
         Log.d(TAG, "Crash analysis completed!");
+    }
+
+    private static void crashHandler(Application application) {
+
+        SherlockDatabaseHelper database = new SherlockDatabaseHelper(application);
+
+        // check if t crash list is contains data
+        if(database.getCrashes().size()!=0){
+            JSONArray crashes = database.getCrashesAsJson();
+
+            new SendCrashDetails(database.getCrashes().get(0) , result -> {
+                if (result.contains("201")) {
+                    // remove carshes
+                    database.deleteFromTable();
+                }
+            }).execute(crashes.toString());
+        }
+
     }
 
     public static void setAppInfoProvider(AppInfoProvider appInfoProvider) {
