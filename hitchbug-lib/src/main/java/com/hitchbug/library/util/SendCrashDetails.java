@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hitchbug.library.core.Hitchbug;
 import com.hitchbug.library.core.investigation.Crash;
 
 import java.io.BufferedReader;
@@ -58,7 +59,7 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
 
     private void main() throws IOException {
 
-        URL url = new URL(Config.BASE_URL+ Config.API_KEY);
+        URL url = new URL(Config.BASE_URL+ Hitchbug.APP_KEY);
 
         Map<String, Object> params2 = new LinkedHashMap<>();
         params2.put("application_id", "1");

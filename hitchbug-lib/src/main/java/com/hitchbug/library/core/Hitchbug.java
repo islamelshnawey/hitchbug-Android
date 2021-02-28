@@ -19,7 +19,7 @@ import java.util.List;
 
 public class Hitchbug {
 
-    public static final String APP_KEY = "";
+    public static String APP_KEY = "";
 
     private static final String TAG = Hitchbug.class.getSimpleName();
     private static Hitchbug instance;
@@ -71,7 +71,7 @@ public class Hitchbug {
         Crash crash = crashAnalyzer.getAnalysis();
         int crashId = instance.database.insertCrash(CrashRecord.createFrom(crash));
         crash.setId(crashId);
-        instance.crashReporter.report(new CrashViewModel(crash));
+        //instance.crashReporter.report(new CrashViewModel(crash));
         Log.d(TAG, "Crash analysis completed!");
     }
 
@@ -94,6 +94,7 @@ public class Hitchbug {
             this.application = application;
             this.app_key = app_key;
 
+            APP_KEY = this.app_key;
             init(application);
         }
 
