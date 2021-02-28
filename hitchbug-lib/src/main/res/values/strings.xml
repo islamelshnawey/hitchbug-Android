@@ -1,0 +1,15 @@
+<resources>
+  <string name="app_name">Sherlock</string>
+  <string name="stack_trace">Stack Trace</string>
+  <string name="crash_report">Crash Report</string>
+  <string name="share">Share</string>
+  <string name="share_dialog_message">Share Crash Using</string>
+  <string name="about_phone">About Phone</string>
+  <string name="android_api_version">Android API</string>
+  <string name="name">Name</string>
+  <string name="brand">Brand</string>
+  <string name="about_app">About Application</string>
+  <string name="version">Version</string>
+  <string name="not_found">404</string>
+  <string name="github_link">https://github.com/ajitsing/Sherlock</string>
+</resources>

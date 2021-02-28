@@ -1,0 +1,3 @@
+include ':hitchbug-lib'
+include ':app'
+rootProject.name = "hitchbug"
