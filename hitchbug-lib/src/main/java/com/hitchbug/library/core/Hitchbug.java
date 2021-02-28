@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.hitchbug.library.core.database.CrashRecord;
 import com.hitchbug.library.core.database.SherlockDatabaseHelper;
+import com.hitchbug.library.core.investigation.AppInfo;
 import com.hitchbug.library.core.investigation.AppInfoProvider;
 import com.hitchbug.library.core.investigation.Crash;
 import com.hitchbug.library.core.investigation.CrashAnalyzer;
@@ -36,12 +37,12 @@ public class Hitchbug {
         appInfoProvider = new DefaultAppInfoProvider(context);
     }
 
-    public static void init(Application application) {
+    public static void init(Application application , AppInfo appInfo) {
 
         Log.d(TAG, "Initializing Hitchbug...");
         instance = new Hitchbug(application);
 
-        crashHandler(application);
+        crashHandler(application , appInfo);
 
         final Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
 
@@ -80,7 +81,7 @@ public class Hitchbug {
         Log.d(TAG, "Crash analysis completed!");
     }
 
-    private static void crashHandler(Application application) {
+    private static void crashHandler(Application application, AppInfo appInfo) {
 
         SherlockDatabaseHelper database = new SherlockDatabaseHelper(application);
 
@@ -88,7 +89,7 @@ public class Hitchbug {
         if(database.getCrashes().size()!=0){
             JSONArray crashes = database.getCrashesAsJson();
 
-            new SendCrashDetails(database.getCrashes().get(0) , result -> {
+            new SendCrashDetails(database.getCrashes().get(0) , appInfo,result -> {
                 if (result.contains("201")) {
                     // remove carshes
                     database.deleteFromTable();
@@ -108,17 +109,22 @@ public class Hitchbug {
 
     public static class Builder {
 
+        public String packageName;
+        public String versionName;
+        public int versionCode;
+
         private String app_key;
         private Context applicationContext;
         @Nullable
         private Application application;
 
-        public Builder(@Nullable Application application, String app_key) {
+        public Builder(@Nullable Application application, String app_key ,AppInfo appInfo) {
             this.application = application;
             this.app_key = app_key;
 
             APP_KEY = this.app_key;
-            init(application);
+
+            init(application ,new AppInfo(appInfo.packageName ,appInfo.versionName ,appInfo.versionCode));
         }
 
         public Hitchbug build() {

@@ -1,11 +1,14 @@
 package com.hitchbug.library.util;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hitchbug.library.BuildConfig;
 import com.hitchbug.library.core.Hitchbug;
+import com.hitchbug.library.core.investigation.AppInfo;
 import com.hitchbug.library.core.investigation.Crash;
 
 import java.io.BufferedReader;
@@ -27,11 +30,13 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
 
     private SendCrashListener mListner;
     private Crash mCrash;
+    AppInfo mAppInfo;
     //private UserModel mUser;
 
-    public SendCrashDetails(Crash crash,/* UserModel user,*/ SendCrashListener sendCrashListener) {
+    public SendCrashDetails(Crash crash,AppInfo appInfo, SendCrashListener sendCrashListener) {
         mListner = sendCrashListener;
         mCrash = crash;
+        mAppInfo = appInfo;
         //mUser = user ;
     }
 
@@ -63,15 +68,15 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
 
         Map<String, Object> params2 = new LinkedHashMap<>();
         params2.put("application_id", "1");
-        params2.put("android_version", android.os.Build.VERSION.SDK_INT);
-        params2.put("app_version_code", "BuildConfig.VERSION_CODE");
-        params2.put("app_version_name", "BuildConfig.VERSION_NAME");
+        params2.put("android_version", mCrash.getDeviceInfo().getSdk());
+        params2.put("app_version_code",mAppInfo.versionCode);
+        params2.put("app_version_name", mAppInfo.versionName);
         params2.put("device_features", "n/a");
         params2.put("device_id", "n/a");
-        params2.put("environment", "BuildConfig.BUILD_TYPE");
+        params2.put("environment", BuildConfig.BUILD_TYPE);
         params2.put("file_path", mCrash.getPlace());
         params2.put("logcat", mCrash.getReason());
-        params2.put("package_name", "BuildConfig.APPLICATION_ID");
+        params2.put("package_name",  mAppInfo.packageName);
         params2.put("phone_model", mCrash.getDeviceInfo().getManufacturer() + "\n" + mCrash.getDeviceInfo().getBrand()
                 + "\n" + mCrash.getDeviceInfo().getName()
                 + "\n" + mCrash.getDeviceInfo().getSdk());
@@ -79,7 +84,7 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
         params2.put("stack_trace", mCrash.getStackTrace());
         params2.put("user_comment", "n/a");
         params2.put("user_crash_date", mCrash.getDate());
-        params2.put("user_email", "mUser.getId()");
+        params2.put("user_email", "n/a");
 
         ObjectMapper mapper = new ObjectMapper();
 

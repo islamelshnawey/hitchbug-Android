@@ -6,6 +6,17 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class AppInfo {
+
+  public String packageName;
+  public String versionName;
+  public int versionCode;
+
+  public AppInfo(String packageName, String versionName, int versionCode) {
+    this.packageName = packageName;
+    this.versionName = versionName;
+    this.versionCode = versionCode;
+  }
+
   private List<Pair> appDetails = new ArrayList<>();
 
   private AppInfo(List<Pair> appDetails) {
