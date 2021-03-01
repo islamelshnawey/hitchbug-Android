@@ -91,7 +91,7 @@ public class Hitchbug {
 
             new SendCrashDetails(database.getCrashes().get(0) , appInfo,result -> {
                 if (result.contains("201")) {
-                    // remove carshes
+                    // remove crashes
                     database.deleteFromTable();
                 }
             }).execute(crashes.toString());
@@ -124,7 +124,7 @@ public class Hitchbug {
 
             APP_KEY = this.app_key;
 
-            init(application ,new AppInfo(appInfo.packageName ,appInfo.versionName ,appInfo.versionCode));
+            init(application ,new AppInfo(appInfo.email ,appInfo.packageName ,appInfo.versionName ,appInfo.versionCode));
         }
 
         public Hitchbug build() {

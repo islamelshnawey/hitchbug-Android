@@ -7,11 +7,13 @@ import java.util.TreeMap;
 
 public class AppInfo {
 
+  public String email;
   public String packageName;
   public String versionName;
   public int versionCode;
 
-  public AppInfo(String packageName, String versionName, int versionCode) {
+  public AppInfo(String email,String packageName, String versionName, int versionCode) {
+    this.email = email;
     this.packageName = packageName;
     this.versionName = versionName;
     this.versionCode = versionCode;
