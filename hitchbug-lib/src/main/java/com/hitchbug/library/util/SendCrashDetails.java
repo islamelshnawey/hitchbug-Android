@@ -44,13 +44,14 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
 
         try {
-            main();
+            main2();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return "";
     }
+
 
     @Override
     protected void onPostExecute(String result) {
@@ -157,5 +158,17 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
                 con.disconnect();
             }
         }
+    }
+
+    private void main2()  throws IOException  {
+        JsonParseSuggestion jp = new JsonParseSuggestion();
+        String code;
+        code = jp.getParseJsonWCF(mCrash, mAppInfo);
+        mListner.onFinsish(code);
+
+       /* if (code.contains("201")) {
+            // remove crashes
+            database.deleteFromTable();
+        }*/
     }
 }

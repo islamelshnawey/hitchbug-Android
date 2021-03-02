@@ -92,20 +92,12 @@ public class Hitchbug {
 
             JSONArray crashes = database.getCrashesAsJson();
 
-            JsonParseSuggestion jp = new JsonParseSuggestion();
-            String code;
-            code = jp.getParseJsonWCF(database.getCrashes().get(0), appInfo);
-            if (code.contains("201")) {
-                // remove crashes
-                database.deleteFromTable();
-            }
-
-           /* new SendCrashDetails(database.getCrashes().get(0), appInfo, result -> {
+            new SendCrashDetails(database.getCrashes().get(0), appInfo, result -> {
                 if (result.contains("201")) {
                     // remove crashes
                     database.deleteFromTable();
                 }
-            }).execute(crashes.toString());*/
+            }).execute(crashes.toString());
         }
 
     }
