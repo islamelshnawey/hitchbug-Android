@@ -30,10 +30,10 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
 
     private SendCrashListener mListner;
     private Crash mCrash;
-    AppInfo mAppInfo;
+    private AppInfo mAppInfo;
     //private UserModel mUser;
 
-    public SendCrashDetails(Crash crash,AppInfo appInfo, SendCrashListener sendCrashListener) {
+    public SendCrashDetails(Crash crash, AppInfo appInfo, SendCrashListener sendCrashListener) {
         mListner = sendCrashListener;
         mCrash = crash;
         mAppInfo = appInfo;
@@ -64,19 +64,19 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
 
     private void main() throws IOException {
 
-        URL url = new URL(Config.BASE_URL+ Hitchbug.APP_KEY);
+        URL url = new URL(Config.BASE_URL + Hitchbug.APP_KEY);
 
         Map<String, Object> params2 = new LinkedHashMap<>();
         params2.put("application_id", "1");
         params2.put("android_version", mCrash.getDeviceInfo().getSdk());
-        params2.put("app_version_code",mAppInfo.versionCode);
+        params2.put("app_version_code", mAppInfo.versionCode);
         params2.put("app_version_name", mAppInfo.versionName);
         params2.put("device_features", "n/a");
         params2.put("device_id", "n/a");
         params2.put("environment", BuildConfig.BUILD_TYPE);
         params2.put("file_path", mCrash.getPlace());
         params2.put("logcat", mCrash.getReason());
-        params2.put("package_name",  mAppInfo.packageName);
+        params2.put("package_name", mAppInfo.packageName);
         params2.put("phone_model", mCrash.getDeviceInfo().getManufacturer() + "\n" + mCrash.getDeviceInfo().getBrand()
                 + "\n" + mCrash.getDeviceInfo().getName()
                 + "\n" + mCrash.getDeviceInfo().getSdk());

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Crash {
+
   private int id;
   private DeviceInfo deviceInfo;
   private AppInfo appInfo;
@@ -16,7 +17,8 @@ public class Crash {
   private String reason;
   private String stackTrace;
   private Date date;
-  public static final String DATE_FORMAT = "EEE MMM dd kk:mm:ss z yyyy";
+
+  public static final String DATE_FORMAT = "MM/dd/yyyy HH:mm";
 
   public Crash(String place, String reason, String stackTrace) {
     this.place = place;

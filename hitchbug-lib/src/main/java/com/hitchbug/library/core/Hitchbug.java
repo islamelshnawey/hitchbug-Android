@@ -15,6 +15,8 @@ import com.hitchbug.library.core.investigation.CrashAnalyzer;
 import com.hitchbug.library.core.investigation.CrashReporter;
 import com.hitchbug.library.core.investigation.CrashViewModel;
 import com.hitchbug.library.core.investigation.DefaultAppInfoProvider;
+import com.hitchbug.library.model.SuggestGetSet;
+import com.hitchbug.library.util.JsonParseSuggestion;
 import com.hitchbug.library.util.SendCrashDetails;
 
 import org.json.JSONArray;
@@ -37,12 +39,12 @@ public class Hitchbug {
         appInfoProvider = new DefaultAppInfoProvider(context);
     }
 
-    public static void init(Application application , AppInfo appInfo) {
+    public static void init(Application application, AppInfo appInfo) {
 
         Log.d(TAG, "Initializing Hitchbug...");
         instance = new Hitchbug(application);
 
-        crashHandler(application , appInfo);
+        crashHandler(application, appInfo);
 
         final Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
 
@@ -86,15 +88,24 @@ public class Hitchbug {
         SherlockDatabaseHelper database = new SherlockDatabaseHelper(application);
 
         // check if t crash list is contains data
-        if(database.getCrashes().size()!=0){
+        if (database.getCrashes().size() != 0) {
+
             JSONArray crashes = database.getCrashesAsJson();
 
-            new SendCrashDetails(database.getCrashes().get(0) , appInfo,result -> {
+            JsonParseSuggestion jp = new JsonParseSuggestion();
+            String code;
+            code = jp.getParseJsonWCF(database.getCrashes().get(0), appInfo);
+            if (code.contains("201")) {
+                // remove crashes
+                database.deleteFromTable();
+            }
+
+           /* new SendCrashDetails(database.getCrashes().get(0), appInfo, result -> {
                 if (result.contains("201")) {
                     // remove crashes
                     database.deleteFromTable();
                 }
-            }).execute(crashes.toString());
+            }).execute(crashes.toString());*/
         }
 
     }
@@ -118,13 +129,13 @@ public class Hitchbug {
         @Nullable
         private Application application;
 
-        public Builder(@Nullable Application application, String app_key ,AppInfo appInfo) {
+        public Builder(@Nullable Application application, String app_key, AppInfo appInfo) {
             this.application = application;
             this.app_key = app_key;
 
             APP_KEY = this.app_key;
 
-            init(application ,new AppInfo(appInfo.email ,appInfo.packageName ,appInfo.versionName ,appInfo.versionCode));
+            init(application, new AppInfo(appInfo.email, appInfo.packageName, appInfo.applicationId, appInfo.versionName, appInfo.versionCode));
         }
 
         public Hitchbug build() {

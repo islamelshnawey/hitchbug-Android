@@ -9,13 +9,15 @@ public class AppInfo {
 
   public String email;
   public String packageName;
+  public String applicationId;
   public String versionName;
   public int versionCode;
 
-  public AppInfo(String email,String packageName, String versionName, int versionCode) {
+  public AppInfo(String email,String packageName,String applicationId, String versionName, int versionCode) {
     this.email = email;
     this.packageName = packageName;
     this.versionName = versionName;
+    this.applicationId = applicationId;
     this.versionCode = versionCode;
   }
 
