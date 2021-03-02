@@ -67,10 +67,10 @@ public class JsonParseSuggestion {
 
                     Log.d("response=", jsonResponse.toString());
 
-                    boolean status = jsonResponse.getBoolean("status");
+                    boolean status = jsonResponse.getJSONObject("").getBoolean("status");
 
-                    String message = jsonResponse.getString("message");
-                    code = jsonResponse.getString("code");
+                    String message = jsonResponse.getJSONObject("").getString("message");
+                    code = jsonResponse.getJSONObject("").getString("code");
 
                     if (status) {
                         JSONObject jobject = jsonResponse.getJSONObject("data");
