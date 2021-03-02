@@ -10,10 +10,14 @@ import com.hitchbug.library.core.investigation.Crash;
 import com.hitchbug.library.model.SuggestGetSet;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class JsonParseSuggestion {
     double current_latitude, current_longitude;
@@ -67,10 +71,14 @@ public class JsonParseSuggestion {
 
                     Log.d("response=", jsonResponse.toString());
 
+                    JSONObject jObj = new JSONObject(jsonResponse.toString());
+                    String status2 = recurseKeys(jObj, "status");
+                    code = recurseKeys(jObj, "code");
+
                     boolean status = jsonResponse.getJSONObject("").getBoolean("status");
 
                     String message = jsonResponse.getJSONObject("").getString("message");
-                    code = jsonResponse.getJSONObject("").getString("code");
+                    //code = jsonResponse.getJSONObject("").getString("code");
 
                     if (status) {
                         JSONObject jobject = jsonResponse.getJSONObject("data");
@@ -102,4 +110,40 @@ public class JsonParseSuggestion {
 
     }
 
+
+    public static String recurseKeys(JSONObject jObj, String findKey) throws JSONException {
+        String finalValue = "";
+        if (jObj == null) {
+            return "";
+        }
+
+        Iterator<String> keyItr = jObj.keys();
+        Map<String, String> map = new HashMap<>();
+
+        while(keyItr.hasNext()) {
+            String key = keyItr.next();
+            try {
+                map.put(key, jObj.getString(key));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (Map.Entry<String, String> e : (map).entrySet()) {
+            String key = e.getKey();
+            if (key.equalsIgnoreCase(findKey)) {
+                return jObj.getString(key);
+            }
+
+            // read value
+            Object value = jObj.get(key);
+
+            if (value instanceof JSONObject) {
+                finalValue = recurseKeys((JSONObject)value, findKey);
+            }
+        }
+
+        // key is not found
+        return finalValue;
+    }
 }
