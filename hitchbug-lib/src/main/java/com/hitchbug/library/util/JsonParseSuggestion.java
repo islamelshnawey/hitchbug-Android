@@ -63,7 +63,7 @@ public class JsonParseSuggestion {
 
                 JSONObject jsonResponse = new JSONObject(line);
 
-                if (!jsonResponse.isNull(line)) {
+                if (jsonResponse != null) {
 
                     Log.d("response=", jsonResponse.toString());
 

@@ -166,9 +166,5 @@ public class SendCrashDetails extends AsyncTask<String, Void, String> {
         code = jp.getParseJsonWCF(mCrash, mAppInfo);
         mListner.onFinsish(code);
 
-       /* if (code.contains("201")) {
-            // remove crashes
-            database.deleteFromTable();
-        }*/
     }
 }
