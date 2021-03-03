@@ -13,10 +13,7 @@ import com.hitchbug.library.core.investigation.AppInfoProvider;
 import com.hitchbug.library.core.investigation.Crash;
 import com.hitchbug.library.core.investigation.CrashAnalyzer;
 import com.hitchbug.library.core.investigation.CrashReporter;
-import com.hitchbug.library.core.investigation.CrashViewModel;
 import com.hitchbug.library.core.investigation.DefaultAppInfoProvider;
-import com.hitchbug.library.model.SuggestGetSet;
-import com.hitchbug.library.util.JsonParseSuggestion;
 import com.hitchbug.library.util.SendCrashDetails;
 
 import org.json.JSONArray;
@@ -63,7 +60,7 @@ public class Hitchbug {
 
     public static Hitchbug getInstance() {
         if (!isInitialized()) {
-            throw new SherlockNotInitializedException();
+            throw new HitchbugNotInitializedException();
         }
         Log.d(TAG, "Returning existing instance...");
         return instance;

@@ -1,9 +1,9 @@
 <resources>
 
-  <style name="SherlockTheme" parent="Sherlock.Base">
+  <style name="HitchbugTheme" parent="Base">
   </style>
 
-  <style name="Sherlock.Base" parent="Theme.MaterialComponents.Light.Bridge">
+  <style name="Base" parent="Theme.MaterialComponents.Light.Bridge">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="colorPrimary">@color/colorPrimary</item>

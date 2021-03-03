@@ -9,7 +9,6 @@ import com.hitchbug.library.core.investigation.AppInfo;
 import com.hitchbug.library.core.investigation.Crash;
 import com.hitchbug.library.model.SuggestGetSet;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,21 +18,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class JsonParseSuggestion {
+public class JsonParseing {
+
+    private static String TAG = "JsonParseing";
     double current_latitude, current_longitude;
 
-    public JsonParseSuggestion() {
+    public JsonParseing() {
     }
 
-    public JsonParseSuggestion(double current_latitude, double current_longitude) {
+    public JsonParseing(double current_latitude, double current_longitude) {
         this.current_latitude = current_latitude;
         this.current_longitude = current_longitude;
     }
 
-    public String getParseJsonWCF(Crash mCrash, AppInfo mAppInfo) {
+    public String getParseJson(Crash mCrash, AppInfo mAppInfo) {
 
         List<SuggestGetSet> ListData = new ArrayList<SuggestGetSet>();
+
         String code = "";
+        String status = "";
+        String message = "";
 
         try {
 
@@ -57,11 +61,12 @@ public class JsonParseSuggestion {
             multipart.addFormField("stack_trace", mCrash.getStackTrace());
             multipart.addFormField("user_comment", "n/a");
             multipart.addFormField("user_crash_date", String.valueOf(mCrash.getDate()));
-            multipart.addFormField("user_email", "n/a");
+            multipart.addFormField("user_email", mAppInfo.email);
 
             List<String> response = multipart.finish();
 
             for (String line : response) {
+
                 // Get your server response here.
                 System.out.println(line);
 
@@ -72,15 +77,11 @@ public class JsonParseSuggestion {
                     Log.d("response=", jsonResponse.toString());
 
                     JSONObject jObj = new JSONObject(jsonResponse.toString());
-                    String status2 = recurseKeys(jObj, "status");
+                    status = recurseKeys(jObj, "status");
                     code = recurseKeys(jObj, "code");
+                    message = recurseKeys(jObj, "message");
 
-                    boolean status = jsonResponse.getJSONObject("").getBoolean("status");
-
-                    String message = jsonResponse.getJSONObject("").getString("message");
-                    //code = jsonResponse.getJSONObject("").getString("code");
-
-                    if (status) {
+                    if (status.equals("true")) {
                         JSONObject jobject = jsonResponse.getJSONObject("data");
 
                         if (jobject.has("data")) {
@@ -90,15 +91,12 @@ public class JsonParseSuggestion {
 
                             }
 
-
                         }
 
                     }
 
-
                 } else {
-
-                    Log.d("", "");
+                    Log.d(TAG, "Response Is Null !!");
                 }
 
             }
@@ -106,10 +104,9 @@ public class JsonParseSuggestion {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
+
         return code;
-
     }
-
 
     public static String recurseKeys(JSONObject jObj, String findKey) throws JSONException {
         String finalValue = "";
@@ -120,7 +117,7 @@ public class JsonParseSuggestion {
         Iterator<String> keyItr = jObj.keys();
         Map<String, String> map = new HashMap<>();
 
-        while(keyItr.hasNext()) {
+        while (keyItr.hasNext()) {
             String key = keyItr.next();
             try {
                 map.put(key, jObj.getString(key));
@@ -139,7 +136,7 @@ public class JsonParseSuggestion {
             Object value = jObj.get(key);
 
             if (value instanceof JSONObject) {
-                finalValue = recurseKeys((JSONObject)value, findKey);
+                finalValue = recurseKeys((JSONObject) value, findKey);
             }
         }
 

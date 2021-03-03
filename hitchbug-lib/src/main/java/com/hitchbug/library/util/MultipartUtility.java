@@ -125,6 +125,7 @@ public class MultipartUtility {
      * @throws IOException
      */
     public List<String> finish() throws IOException {
+
         List<String> response = new ArrayList<String>();
         writer.append(LINE_FEED).flush();
         writer.append("--" + boundary + "--").append(LINE_FEED);
@@ -132,6 +133,7 @@ public class MultipartUtility {
 
         // checks server's status code first
         int status = httpConn.getResponseCode();
+
         if (status == HttpURLConnection.HTTP_CREATED) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     httpConn.getInputStream()));
@@ -141,6 +143,7 @@ public class MultipartUtility {
             }
             reader.close();
             httpConn.disconnect();
+
         } else {
             throw new IOException("Server returned non-OK status: " + status);
         }
