@@ -133,6 +133,7 @@ public class MultipartUtility {
 
         // checks server's status code first
         int status = httpConn.getResponseCode();
+        String msg = httpConn.getResponseMessage();
 
         if (status == HttpURLConnection.HTTP_CREATED) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
